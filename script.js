@@ -1,10 +1,10 @@
 const canvas = document.querySelector("canvas")
 const ctx = canvas.getContext("2d")
 
-const size = 30
+const size = 20 
 
 const snake = [
-    {x: 270, y: 240}
+    {x: 180, y:180 }
 ]
 
 let direction, loopId
@@ -30,33 +30,64 @@ const moveSnake = () => {
 
     snake.shift()
 
+    let newHead = {x: head.x, y: head.y}
+
     if (direction == "right") {
-        snake.push({ x: head.x + size, y: head.y })
+        newHead.x += size
     }
 
     if (direction == "left") {
-        snake.push({ x: head.x - size, y: head.y })
+        newHead.x -= size
     }
 
     if (direction == "down") {
-        snake.push({ x: head.x, y: head.y + size})
+        newHead.y += size
     }
 
     if (direction == "up") {
-        snake.push({ x: head.x, y: head.y - size})
+        newHead.y -= size
     }
+
+    if (newHead.x >= canvas.width) newHead.x = 0
+    if (newHead.x < 0) newHead.x = canvas.width - size
+    if (newHead.y >= canvas.height) newHead.y = 0
+    if (newHead.y < 0) newHead.y = canvas.height - size
+
+    snake.push(newHead)
 }
+
+const drawGrid = () => {
+    ctx.lineWidth = 1
+    ctx.strokeStyle = "#191919"
+
+    for (let i = 20; i < canvas.width; i += 20) {
+        ctx.beginPath()
+        ctx.lineTo(i, 0)
+        ctx.lineTo(i, 400)
+        ctx.stroke( )
+
+        ctx.beginPath()
+        ctx.lineTo(0, i)
+        ctx.lineTo(400, i)
+        ctx.stroke( )
+    }
+
+    
+}
+
+
 
 const gameLoop = () => {
     clearInterval(loopId)
 
-    ctx.clearRect(0, 0, 600, 600)
+    ctx.clearRect(0, 0, 400, 400)
+    drawGrid()
     moveSnake()
     drawSknake()
 
     loopId = setTimeout(() => {
         gameLoop()
-    }, 300)
+    }, 250)
 }
 
 gameLoop()
